@@ -1,0 +1,16 @@
+﻿@model IEnumerable<FoodHelper.Data.Models.Food>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    @foreach (var food in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@food.Name</h5>
+            </div>
+        </div>
+    }
+</div>

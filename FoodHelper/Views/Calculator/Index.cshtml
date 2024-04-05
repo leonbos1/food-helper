@@ -1,0 +1,176 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" onclick="showCalculator('BMI')">BMI Calculator</a>
+                <a href="#" class="list-group-item list-group-item-action" onclick="showCalculator('Calories')">Calories Calculator</a>
+                <a href="#" class="list-group-item list-group-item-action" onclick="showCalculator('1RM')">1 RM Calculator</a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div id="bmiCalculator">
+                <h1>Calculate your BMI</h1>
+
+                <form id="calculateBmiForm" action="/Calculator/CalculateBMI" method="post">
+                    <div class="form-group">
+                        <label for="bodyWeight">Body Weight (kg)</label>
+                        <input type="text" class="form-control" id="bodyWeight" name="bodyWeight">
+                    </div>
+                    <div class="form-group">
+                        <label for="bodyHeight">Height (cm)</label>
+                        <input type="text" class="form-control" id="bodyHeight" name="bodyHeight">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </form>
+
+                <div id="bmiResult"></div>
+            </div>
+
+            <div id="caloriesCalculator" style="display: none;">
+                <h1>Calories Calculator</h1>
+
+                <form id="calculateCaloriesForm" action="/Calculator/CalculateCalories" method="post">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select class="form-control" id="gender" name="gender">
+                            <option value="Man">Man</option>
+                            <option value="Woman">Woman</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bodyWeight">Body Weight (kg)</label>
+                        <input type="text" class="form-control" id="bodyWeight" name="bodyWeight">
+                    </div>
+                    <div class="form-group">
+                        <label for="bodyHeight">Height (cm)</label>
+                        <input type="text" class="form-control" id="bodyHeight" name="bodyHeight">
+                    </div>
+                    <div class="form-group">
+                        <label for="exercisesPerWeek">Exercises per week</label>
+                        <select class="form-control" id="exercisesPerWeek" name="exercisesPerWeek">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </form>
+
+                <div id="caloriesResult"></div>
+            </div>
+
+            <div id="1rmCalculator" style="display: none;">
+                <h1>1 RM Calculator</h1>
+                <form id="calculate1rmForm" action="/Calculator/Calculate1rm" method="post">
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="text" class="form-control" id="weight" name="weight">
+                    </div>
+                    <div class="form-group">
+                        <label for="reps">Reps</label>
+                        <input type="text" class="form-control" id="reps" name="reps">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </form>
+
+                <div id="1rmResult"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('calculateBmiForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json()
+            })
+            .then(data => {
+                document.getElementById('bmiResult').innerHTML = '<p>Your BMI is: ' + data + '</p>';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    });
+
+    document.getElementById('calculateCaloriesForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json()
+            })
+            .then(data => {
+                document.getElementById('caloriesResult').innerHTML = '<p>Your daily calories burned are: ' + data + ' calories</p>';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    });
+
+    document.getElementById('calculate1rmForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json()
+            })
+            .then(data => {
+                document.getElementById('1rmResult').innerHTML = '<p>Your 1RM is: ' + data + '</p>';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    });
+
+    function showCalculator(calculatorType) {
+        document.getElementById('bmiCalculator').style.display = 'none';
+        document.getElementById('caloriesCalculator').style.display = 'none';
+        document.getElementById('1rmCalculator').style.display = 'none';
+
+        document.getElementById(calculatorType.toLowerCase() + 'Calculator').style.display = 'block';
+
+        var listGroupItems = document.getElementsByClassName('list-group-item');
+        for (var i = 0; i < listGroupItems.length; i++) {
+            listGroupItems[i].classList.remove('active');
+        }
+
+        var activeItem = Array.prototype.filter.call(listGroupItems, function (item) {
+            return item.innerText.includes(calculatorType);
+        })[0];
+
+        activeItem.classList.add('active');
+    }
+</script>
