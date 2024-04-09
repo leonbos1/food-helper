@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   webapp:
-    build: ./food-helper
+    build: ./FoodHelper
     ports:
-      - "443:443"  # Pas de poort aan indien nodig, bijvoorbeeld als je HTTPS gebruikt
+      - "443:443"
     depends_on:
       - db
-     environment:
+    environment:
       - ConnectionString=Server=db;Database=FoodHelperDb;User=sa;Password=yourStrong(!)Password;
 
   db:

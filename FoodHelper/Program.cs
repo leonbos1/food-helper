@@ -1,10 +1,11 @@
 using FoodHelper.Data;
 using FoodHelper.Data.Repositories;
+using FoodHelper.Logic.Services;
+using FoodHelper.Logic.Services.Base;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<FoodContext>(options =>
@@ -14,11 +15,14 @@ builder.Services.AddDbContext<FoodContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<FoodRepository>();
+builder.Services.AddScoped<TokenRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<FoodRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

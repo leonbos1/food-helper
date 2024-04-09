@@ -167,9 +167,13 @@
             listGroupItems[i].classList.remove('active');
         }
 
-        var activeItem = Array.prototype.filter.call(listGroupItems, function (item) {
-            return item.innerText.includes(calculatorType);
-        })[0];
+        console.log(listGroupItems)
+
+        for (var i = 0; i < listGroupItems.length; i++) {
+            if (listGroupItems[i].textContent.replace(/\s/g, '').substring(0, calculatorType.length) === calculatorType) {
+                listGroupItems[i].classList.add('active');
+            }
+        }
 
         activeItem.classList.add('active');
     }

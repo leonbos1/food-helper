@@ -16,7 +16,7 @@ namespace FoodHelper.Data.Repositories
             return DbContext.Set<TEntity>().ToList();
         }
 
-        public virtual TEntity GetById(int id)
+        public virtual TEntity? GetById(int id)
         {
             return DbContext.Set<TEntity>().Find(id);
         }

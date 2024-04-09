@@ -10,5 +10,7 @@ namespace FoodHelper.Data
         }
 
         public DbSet<Food> Foods { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Token> Tokens { get; set; }
     }
 }

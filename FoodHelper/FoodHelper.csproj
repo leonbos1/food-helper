@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FoodHelper.Data\FoodHelper.Data.csproj" />
+    <ProjectReference Include="..\FoodHelper.Logic\FoodHelper.Logic.csproj" />
   </ItemGroup>
 
 </Project>
