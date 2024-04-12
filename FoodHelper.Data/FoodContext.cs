@@ -1,5 +1,7 @@
-﻿using FoodHelper.Data.Models;
+﻿using FoodHelper.Areas.Identity.Data;
+using FoodHelper.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FoodHelper.Data
 {
@@ -10,7 +12,24 @@ namespace FoodHelper.Data
         }
 
         public DbSet<Food> Foods { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Token> Tokens { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+        }
+    }
+
+    public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.Property(u => u.FirstName)
+                .HasMaxLength(50);
+            builder.Property(u => u.LastName)
+                .HasMaxLength(50);
+        }
     }
 }

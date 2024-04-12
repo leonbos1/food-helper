@@ -1,14 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
+﻿using FoodHelper.Data.Models.Base;
 
 namespace FoodHelper.Data.Models
 {
-    public class Food
+    public class Food : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-
         public string? Name { get; set; }
 
         public double? Carbohydrates { get; set; }

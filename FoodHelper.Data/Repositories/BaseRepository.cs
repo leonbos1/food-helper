@@ -1,49 +1,57 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FoodHelper.Data.Models.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodHelper.Data.Repositories
 {
-    public class BaseRepository<TEntity> where TEntity : class
+    public class BaseRepository<T> where T : BaseEntity, new()
     {
-        protected DbContext DbContext { get; set; }
+        protected FoodContext DbContext { get; set; }
+        protected DbSet<T> DbSet { get; set; }
 
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(FoodContext dbContext)
         {
             DbContext = dbContext;
+            DbSet = DbContext.Set<T>();
         }
 
-        public virtual IEnumerable<TEntity> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
-            return DbContext.Set<TEntity>().ToList();
+            return await DbSet.ToListAsync();
         }
 
-        public virtual TEntity? GetById(int id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
-            return DbContext.Set<TEntity>().Find(id);
+            return await DbSet.FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async virtual Task Add(TEntity entity)
+        public async Task<Guid> AddAsync(T entity)
         {
-            await DbContext.Set<TEntity>().AddAsync(entity);
+            entity.Created = DateTime.Now;
+            entity.Modified = DateTime.Now;
+            await DbSet.AddAsync(entity);
+            return entity.Id;
         }
 
-        public virtual void Update(TEntity entity)
+        public async Task Update(T entity)
         {
-            DbContext.Set<TEntity>().Update(entity);
+            entity.Modified = DateTime.Now;
+
+            var entry = await DbSet.FindAsync(entity.Id);
+
+            if (entry != null)
+            {
+                DbContext.Entry(entry).CurrentValues.SetValues(entity);
+            }
         }
 
-        public virtual void Delete(TEntity entity)
+        public async Task Delete(T entity)
         {
-            DbContext.Set<TEntity>().Remove(entity);
-        }
+            var entry = await DbSet.FindAsync(entity.Id);
 
-        public virtual void Save()
-        {
-            DbContext.SaveChangesAsync();
-        }
-
-        public virtual void Dispose()
-        {
-            DbContext.Dispose();
+            if (entry != null)
+            {
+                DbSet.Remove(entity);
+            }
         }
     }
 }

@@ -1,25 +1,21 @@
 using FoodHelper.Data;
 using FoodHelper.Data.Repositories;
-using FoodHelper.Logic.Services;
-using FoodHelper.Logic.Services.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using FoodHelper.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<FoodContext>(options =>
-{
-    var connectionString = builder.Configuration["FoodContext"];
+    options.UseSqlServer(builder.Configuration["FoodContext"]));
 
-    options.UseSqlServer(connectionString);
-});
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FoodContext>();
 
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<FoodRepository>();
-builder.Services.AddScoped<TokenRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<FoodRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -35,6 +31,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthorization();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

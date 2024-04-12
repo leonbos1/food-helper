@@ -1,25 +1,21 @@
-using FoodHelper.Data;
 using FoodHelper.Data.Models;
 using FoodHelper.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace food_helper.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly FoodRepository foodRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger, FoodRepository foodRepository)
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _logger = logger;
-            this.foodRepository = foodRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var foods = foodRepository.GetAll();
+            var foods = await _unitOfWork.FoodRepository.GetAllAsync();
 
             return View(foods);
         }
@@ -29,9 +25,9 @@ namespace food_helper.Controllers
         {
             var food = new Food { Name = "Bread" };
 
-            await foodRepository.Add(food);
+            await _unitOfWork.FoodRepository.AddAsync(food);
 
-            foodRepository.Save();
+            await _unitOfWork.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
