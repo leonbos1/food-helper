@@ -1,7 +1,6 @@
 using FoodHelper.Data;
 using FoodHelper.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using FoodHelper.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<FoodContext>(options =>
-    options.UseSqlServer(builder.Configuration["FoodContext"]));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("FoodContext")));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FoodContext>();
 
@@ -31,7 +30,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapRazorPages();
 
