@@ -1,2 +1,24 @@
-User
-ik moet een presentatie geven bij de sprint review van de rdw. ik ben een afstudeerder van de opleiding hbo ict software engineering. ik ben bezig met een systeem om vins uit te lezen uit fotos van constructieplaten, kentekenbewijzen en ingeslagen vins. dit is nodig voor het via proces (versnelde invoer). behalve vins was er ook de vraag om andere gegevens uit te lezen uit fotos (km stand, merk, orientatie, kwaliteit van de foto). ik heb gekozen om een model te maken vanaf scratch met alleen pytorch (ML library), daarom heb ik de scope wat kleiner gemaakt. ik ben eerste bezig met fotos van constructieplaten en later wil ik het model fine tunen voor ingeslagen vins en kentekenbewijzen. mijn strategie  is om eerst een vin uit te snijden, zodat alle ruis er omheen weg is. vervolgens lees ik de karakters uit met een ander model, een zogenaamde crnn.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["FoodHelper.csproj", "."]
+RUN dotnet restore "./././FoodHelper.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "./FoodHelper.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./FoodHelper.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "FoodHelper.dll"]

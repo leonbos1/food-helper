@@ -1,5 +1,6 @@
 using FoodHelper.Data.Models;
 using FoodHelper.Data.Repositories;
+using FoodHelper.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace food_helper.Controllers
@@ -15,9 +16,13 @@ namespace food_helper.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var foods = await _unitOfWork.FoodRepository.GetAllAsync();
+            var vm = new HomeViewModel
+            {
+                FiveLatestAddedFoods = await _unitOfWork.FoodRepository.GetFiveLatestAddedFoodsAsync(),
+                FiveProteinHighFoods = await _unitOfWork.FoodRepository.GetFiveProteinHighFoods(),
+            };
 
-            return View(foods);
+            return View(vm);
         }
 
         [Route("add")]

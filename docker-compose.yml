@@ -2,13 +2,17 @@ version: '3.8'
 
 services:
   webapp:
-    build: ./FoodHelper
+    build:
+      context: ./FoodHelper
+      dockerfile: Dockerfile
     ports:
-      - "443:443"
+      - "80:80"
     depends_on:
       - db
     environment:
-      - ConnectionString=Server=db;Database=FoodHelperDb;User=sa;Password=yourStrong(!)Password;
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      FoodContext: "Server=db;Database=FoodHelperDb;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;"
 
   db:
     image: "mcr.microsoft.com/mssql/server:2019-latest"

@@ -1,16 +1,53 @@
-﻿@model IEnumerable<FoodHelper.Data.Models.Food>
+﻿@model FoodHelper.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    @foreach (var food in Model)
-    {
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">@food.Name</h5>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="text-center">
+                <h1 class="mb-3">Latest Foods Added</h1>
+                @if (Model.FiveLatestAddedFoods != null && Model.FiveLatestAddedFoods.Any())
+                {
+                    foreach (var food in Model.FiveLatestAddedFoods)
+                    {
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h5 class="card-title">@food.Name</h5>
+                                <p class="card-text">@food.Description</p>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No recent foods added.</p>
+                }
             </div>
         </div>
-    }
+
+        <div class="col-md-6">
+            <div class="text-center">
+                <h1 class="mb-3">Top High Protein Foods</h1>
+                @if (Model.FiveProteinHighFoods != null && Model.FiveProteinHighFoods.Any())
+                {
+                    foreach (var food in Model.FiveProteinHighFoods)
+                    {
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h5 class="card-title">@food.Name</h5>
+                                <p class="card-text">Proteins: @food.Proteins g</p>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No high-protein foods to display.</p>
+                }
+            </div>
+        </div>
+    </div>
 </div>
