@@ -2,10 +2,9 @@
 
 namespace FoodHelper.Models
 {
-    public class Category : BaseEntity
+    public class Exercise : BaseEntity
     {
         public string? Name { get; set; }
-
-        public List<Food>? Foods { get; set; }
+        public string? Description { get; set; }
     }
 }

@@ -1,0 +1,60 @@
+﻿@model FoodHelper.ViewModels.FoodViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New Food</h1>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="NewFood.Name">Name</label>
+        <input asp-for="NewFood.Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Carbohydrates">Carbohydrates</label>
+        <input asp-for="NewFood.Carbohydrates" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Proteins">Proteins</label>
+        <input asp-for="NewFood.Proteins" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Fats">Fats</label>
+        <input asp-for="NewFood.Fats" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Fibres">Fibres</label>
+        <input asp-for="NewFood.Fibres" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Alcohol">Alcohol</label>
+        <input asp-for="NewFood.Alcohol" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Weight">Weight</label>
+        <input asp-for="NewFood.Weight" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Price">Price</label>
+        <input asp-for="NewFood.Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Description">Description</label>
+        <textarea asp-for="NewFood.Description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageFile">Image</label>
+        <input type="file" id="ImageFile" name="ImageFile" class="form-control-file" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewFood.Category">Category</label>
+        <input asp-for="NewFood.Category" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

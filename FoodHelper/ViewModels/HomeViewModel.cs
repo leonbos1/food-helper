@@ -1,4 +1,4 @@
-﻿using FoodHelper.Data.Models;
+﻿using FoodHelper.Models;
 
 namespace FoodHelper.ViewModels
 {

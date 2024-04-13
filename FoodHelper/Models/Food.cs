@@ -1,6 +1,6 @@
 ﻿using FoodHelper.Data.Models.Base;
 
-namespace FoodHelper.Data.Models
+namespace FoodHelper.Models
 {
     public class Food : BaseEntity
     {
@@ -24,10 +24,14 @@ namespace FoodHelper.Data.Models
 
         public string? Description { get; set; }
 
-        public string? Image { get; set; }
+        public byte[]? Image { get; set; }
 
         public Guid? CategoryId { get; set; }
 
         public Category? Category { get; set; }
+
+        public string? UserId { get; set; }
+
+        public User? User { get; set; }
     }
 }

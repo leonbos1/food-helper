@@ -1,5 +1,5 @@
-using FoodHelper.Data.Models;
-using FoodHelper.Data.Repositories;
+using FoodHelper.Models;
+using FoodHelper.Repositories;
 using FoodHelper.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,10 +1,9 @@
-﻿using FoodHelper.Areas.Identity.Data;
-using FoodHelper.Data.Models;
+﻿using FoodHelper.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FoodHelper.Data
+namespace FoodHelper
 {
     public class FoodContext : IdentityDbContext<User>
     {
@@ -13,12 +12,36 @@ namespace FoodHelper.Data
         }
         public DbSet<Food> Foods { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Workout> Workouts { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<ExerciseBatch> ExerciseBatches { get; set; }
+        public DbSet<ExerciseSet> ExerciseSets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+
+            builder.Entity<ExerciseBatch>()
+                .HasMany(eb => eb.ExerciseSets)
+                .WithOne(es => es.ExerciseBatch)
+                .HasForeignKey(es => es.ExerciseBatchId);
+
+            builder.Entity<Workout>()
+                .HasMany(w => w.ExerciseBatches)
+                .WithOne(eb => eb.Workout)
+                .HasForeignKey(eb => eb.WorkoutId);
+
+            builder.Entity<Food>()
+                .HasOne(f => f.User)
+                .WithMany(u => u.Foods)
+                .HasForeignKey(f => f.UserId);
+
+            builder.Entity<Food>()
+                .HasOne(f => f.Category)
+                .WithMany(c => c.Foods)
+                .HasForeignKey(f => f.CategoryId);
         }
     }
 

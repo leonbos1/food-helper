@@ -142,8 +142,8 @@ namespace FoodHelper.Migrations
                     b.Property<double?>("Fibres")
                         .HasColumnType("float");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("datetime2");
@@ -157,6 +157,9 @@ namespace FoodHelper.Migrations
                     b.Property<double?>("Proteins")
                         .HasColumnType("float");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<double?>("Weight")
                         .HasColumnType("float");
 
@@ -164,7 +167,124 @@ namespace FoodHelper.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Foods");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.Exercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.ExerciseBatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ExerciseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("WorkoutId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("ExerciseBatches");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.ExerciseSet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ExerciseBatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Reps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetNumber")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseBatchId");
+
+                    b.ToTable("ExerciseSets");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.Workout", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Workouts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -310,7 +430,46 @@ namespace FoodHelper.Migrations
                         .WithMany("Foods")
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("FoodHelper.Areas.Identity.Data.User", "User")
+                        .WithMany("Foods")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.ExerciseBatch", b =>
+                {
+                    b.HasOne("FoodHelper.Models.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId");
+
+                    b.HasOne("FoodHelper.Models.Workout", "Workout")
+                        .WithMany("ExerciseBatches")
+                        .HasForeignKey("WorkoutId");
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.ExerciseSet", b =>
+                {
+                    b.HasOne("FoodHelper.Models.ExerciseBatch", "ExerciseBatch")
+                        .WithMany("ExerciseSets")
+                        .HasForeignKey("ExerciseBatchId");
+
+                    b.Navigation("ExerciseBatch");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.Workout", b =>
+                {
+                    b.HasOne("FoodHelper.Areas.Identity.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -364,9 +523,24 @@ namespace FoodHelper.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FoodHelper.Areas.Identity.Data.User", b =>
+                {
+                    b.Navigation("Foods");
+                });
+
             modelBuilder.Entity("FoodHelper.Data.Models.Category", b =>
                 {
                     b.Navigation("Foods");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.ExerciseBatch", b =>
+                {
+                    b.Navigation("ExerciseSets");
+                });
+
+            modelBuilder.Entity("FoodHelper.Models.Workout", b =>
+                {
+                    b.Navigation("ExerciseBatches");
                 });
 #pragma warning restore 612, 618
         }

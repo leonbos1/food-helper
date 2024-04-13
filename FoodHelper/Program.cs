@@ -1,16 +1,17 @@
+using FoodHelper;
 using FoodHelper.Data;
-using FoodHelper.Data.Repositories;
+using FoodHelper.Models;
+using FoodHelper.Repositories;
 using Microsoft.EntityFrameworkCore;
-using FoodHelper.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<FoodContext>(options =>
-    options.UseSqlServer(builder.Configuration["FoodContext"]));
+// options.UseSqlServer(builder.Configuration["FoodContext"]));
 // This is needed for running migrations :clown_emoji:
-// options.UseSqlServer(builder.Configuration.GetConnectionString("FoodContext")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("FoodContext")));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FoodContext>();
 
@@ -36,8 +37,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 

@@ -1,0 +1,44 @@
+﻿@model FoodHelper.ViewModels.FoodViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View Foods</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Food</a>
+</p>
+
+<div class="row">
+    @foreach (var food in Model.Foods)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                @if (food.Image != null)
+                {
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(food.Image)" class="card-img-top" alt="food image" />
+                }
+                else
+                {
+                    <img src="~/images/food.jpg" class="card-img-top" alt="food image" />
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@food.Name</h5>
+                    <p class="card-text">@food.Description</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Price:</strong> $@food.Price</li>
+                        <li class="list-group-item"><strong>Category:</strong> @food.Category</li>
+                        <li class="list-group-item"><strong>Carbohydrates:</strong> @food.Carbohydrates</li>
+                        <li class="list-group-item"><strong>Proteins:</strong> @food.Proteins</li>
+                        <li class="list-group-item"><strong>Fats:</strong> @food.Fats</li>
+                        <li class="list-group-item"><strong>Fibres:</strong> @food.Fibres</li>
+                        <li class="list-group-item"><strong>Alcohol:</strong> @food.Alcohol</li>
+                        <li class="list-group-item"><strong>Calories:</strong> @food.Calories</li>
+                        <li class="list-group item"><a asp-action="Details" asp-route-id="@food.Id" class="btn btn-info">Details</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>

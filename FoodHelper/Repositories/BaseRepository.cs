@@ -1,7 +1,7 @@
 ﻿using FoodHelper.Data.Models.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodHelper.Data.Repositories
+namespace FoodHelper.Repositories
 {
     public class BaseRepository<T> where T : BaseEntity, new()
     {
@@ -14,7 +14,7 @@ namespace FoodHelper.Data.Repositories
             DbSet = DbContext.Set<T>();
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<List<T>> GetAllAsync()
         {
             return await DbSet.ToListAsync();
         }

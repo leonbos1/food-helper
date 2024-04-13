@@ -1,0 +1,43 @@
+﻿@model FoodHelper.ViewModels.FoodViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="container">
+    <h1 class="text-center">Edit Food</h1>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="SelectedFood.Id" />
+        <input type="hidden" asp-for="SelectedFood.Name" />
+        <input type="hidden" asp-for="SelectedFood.Carbohydrates" />
+        <input type="hidden" asp-for="SelectedFood.Proteins" />
+        <input type="hidden" asp-for="SelectedFood.Fats" />
+        <input type="hidden" asp-for="SelectedFood.Fibres" />
+        <input type="hidden" asp-for="SelectedFood.Alcohol" />
+        <input type="hidden" asp-for="SelectedFood.Weight" />
+        <input type="hidden" asp-for="SelectedFood.CategoryId" />
+        <input type="hidden" asp-for="SelectedFood.UserId" />
+
+        <div class="form-group">
+            <label asp-for="SelectedFood.Name">Name:</label>
+            <input asp-for="SelectedFood.Name" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SelectedFood.Description">Description:</label>
+            <textarea asp-for="SelectedFood.Description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SelectedFood.Price">Price:</label>
+            <input asp-for="SelectedFood.Price" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SelectedFood.Image">Image:</label>
+            <input type="file" asp-for="SelectedFood.Image" class="form-control-file" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>

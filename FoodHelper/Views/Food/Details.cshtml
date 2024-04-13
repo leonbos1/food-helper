@@ -1,0 +1,27 @@
+﻿@model FoodHelper.ViewModels.FoodViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8">
+        <h2>@Model.SelectedFood?.Name</h2>
+        <p>@Model.SelectedFood?.Description</p>
+        <p>Price: @Model.SelectedFood?.Price eu</p>
+        <p>Carbohydrates: @Model.SelectedFood?.Carbohydrates g</p>
+        <p>Proteins: @Model.SelectedFood?.Proteins g</p>
+        <p>Fats: @Model.SelectedFood?.Fats g</p>
+        <p>Calories: @Model.SelectedFood?.Calories kcal</p>
+    </div>
+
+    @if (Model.SelectedFood?.User?.Id == Model.CurrentUserId)
+    {
+        <div class="col-md-4">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.SelectedFood?.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Delete", "Delete", new { id = Model.SelectedFood?.Id }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
