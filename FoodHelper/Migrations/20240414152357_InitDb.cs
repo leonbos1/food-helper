@@ -188,6 +188,29 @@ namespace FoodHelper.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Meals",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Meals_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Workouts",
                 columns: table => new
                 {
@@ -268,6 +291,33 @@ namespace FoodHelper.Migrations
                         column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MealFoods",
+                columns: table => new
+                {
+                    MealId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FoodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MealFoods", x => new { x.MealId, x.FoodId });
+                    table.ForeignKey(
+                        name: "FK_MealFoods_Foods_FoodId",
+                        column: x => x.FoodId,
+                        principalTable: "Foods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MealFoods_Meals_MealId",
+                        column: x => x.MealId,
+                        principalTable: "Meals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -357,6 +407,16 @@ namespace FoodHelper.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MealFoods_FoodId",
+                table: "MealFoods",
+                column: "FoodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meals_UserId",
+                table: "Meals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workouts_UserId",
                 table: "Workouts",
                 column: "UserId");
@@ -384,7 +444,7 @@ namespace FoodHelper.Migrations
                 name: "ExerciseSets");
 
             migrationBuilder.DropTable(
-                name: "Foods");
+                name: "MealFoods");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -393,13 +453,19 @@ namespace FoodHelper.Migrations
                 name: "ExerciseBatches");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Foods");
+
+            migrationBuilder.DropTable(
+                name: "Meals");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
 
             migrationBuilder.DropTable(
                 name: "Workouts");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

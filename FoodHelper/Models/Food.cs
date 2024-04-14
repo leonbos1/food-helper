@@ -33,5 +33,7 @@ namespace FoodHelper.Models
         public string? UserId { get; set; }
 
         public User? User { get; set; }
+
+        public ICollection<MealFood> MealFoods { get; set; }
     }
 }

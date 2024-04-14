@@ -1,0 +1,24 @@
+﻿@model FoodHelper.ViewModels.MealViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Add Meal</a>
+    </p>
+    @foreach (var meal in Model.Meals)
+    {
+        @foreach (var mealFood in meal.MealFoods)
+        {
+            <div>
+                <h3>@mealFood.Food.Name</h3>
+                <p>@mealFood.Food.Calories</p>
+                <p>@mealFood.Food.Proteins</p>
+                <p>@mealFood.Food.Carbohydrates</p>
+                <p>@mealFood.Food.Fats</p>
+            </div>
+        }
+    }
+</div>

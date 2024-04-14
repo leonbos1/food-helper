@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace FoodHelper
 {
@@ -16,6 +17,8 @@ namespace FoodHelper
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<ExerciseBatch> ExerciseBatches { get; set; }
         public DbSet<ExerciseSet> ExerciseSets { get; set; }
+        public DbSet<MealFood> MealFoods { get; set; }
+        public DbSet<Meal> Meals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,6 +45,19 @@ namespace FoodHelper
                 .HasOne(f => f.Category)
                 .WithMany(c => c.Foods)
                 .HasForeignKey(f => f.CategoryId);
+
+            builder.Entity<MealFood>()
+                .HasKey(mf => new { mf.MealId, mf.FoodId });
+
+            builder.Entity<MealFood>()
+                .HasOne(mf => mf.Meal)
+                .WithMany(m => m.MealFoods)
+                .HasForeignKey(mf => mf.MealId);
+
+            builder.Entity<MealFood>()
+                .HasOne(mf => mf.Food)
+                .WithMany(f => f.MealFoods)
+                .HasForeignKey(mf => mf.FoodId);
         }
     }
 

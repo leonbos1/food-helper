@@ -1,0 +1,40 @@
+﻿@model FoodHelper.ViewModels.MealViewModel
+
+@{
+    ViewBag.Title = "Create Meal";
+}
+
+<h2>Create Meal</h2>
+
+@using (Html.BeginForm("Create", "Meal", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NewMeal.Name)
+        @Html.TextBoxFor(model => model.NewMeal.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.NewMeal.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NewMeal.Description)
+        @Html.TextBoxFor(model => model.NewMeal.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.NewMeal.Description)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NewMeal.Image, "Meal Image")
+        @Html.TextBoxFor(model => model.NewMeal.Image, new { type = "file" })
+        @Html.ValidationMessageFor(model => model.NewMeal.Image)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Select Foods")
+        @Html.ListBoxFor(model => model.SelectedFoods, Model.AvailableFoods, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.SelectedFoods)
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+}
