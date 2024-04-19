@@ -1,5 +1,4 @@
 using FoodHelper;
-using FoodHelper.Data;
 using FoodHelper.Models;
 using FoodHelper.Repositories;
 using Microsoft.EntityFrameworkCore;

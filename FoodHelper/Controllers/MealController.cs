@@ -1,10 +1,8 @@
-﻿using FoodHelper.ViewModels;
-using FoodHelper.Models;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using FoodHelper.Models;
 using FoodHelper.Repositories;
+using FoodHelper.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class MealController : Controller
 {
@@ -24,26 +22,28 @@ public class MealController : Controller
         return View(vm);
     }
 
-    public async Task<ActionResult> Create()
+    public async Task<ActionResult> Create(MealViewModel viewModel)
     {
-        var availableFoods = await _unitOfWork.FoodRepository.GetAllAsync();
+        var foods = await _unitOfWork.FoodRepository.GetAllAsync();
 
-        var viewModel = new MealViewModel
+        viewModel.AvailableFoods = foods;
+
+        foreach (var food in foods)
         {
-            NewMeal = new Meal(),
-            AvailableFoods = availableFoods.Select(f => new SelectListItem
+            viewModel.AvailableFoodsList.Add(new SelectListItem
             {
-                Value = f.Id.ToString(),
-                Text = f.Name
-            }).ToList()
-        };
+                Text = food.Name,
+                Value = food.Id.ToString()
+            });
+        }
 
         return View(viewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create(MealViewModel viewModel)
+    [Route("Meal/Create")]
+    public async Task<ActionResult> CreatePost(MealViewModel viewModel)
     {
         if (!ModelState.IsValid)
         {

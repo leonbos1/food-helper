@@ -7,7 +7,7 @@
         public double BodyHeight { get; set; }
         public int Age { get; set; }
         public int ExercisesPerWeek { get; set; }
-        public int Reps { get;set; }
+        public int Reps { get; set; }
         public double Weight { get; set; }
     }
 }

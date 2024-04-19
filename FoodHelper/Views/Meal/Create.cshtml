@@ -1,5 +1,4 @@
 ﻿@model FoodHelper.ViewModels.MealViewModel
-
 @{
     ViewBag.Title = "Create Meal";
 }
@@ -18,7 +17,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.NewMeal.Description)
-        @Html.TextBoxFor(model => model.NewMeal.Description, new { @class = "form-control" })
+        @Html.TextAreaFor(model => model.NewMeal.Description, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.NewMeal.Description)
     </div>
 
@@ -29,12 +28,71 @@
     </div>
 
     <div class="form-group">
-        @Html.Label("Select Foods")
-        @Html.ListBoxFor(model => model.SelectedFoods, Model.AvailableFoods, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SelectedFoods)
+        <label>Select Food:</label>
+        <select id="food-select" class="form-control">
+            <option value="">Select Food</option>
+            @foreach (var food in Model.AvailableFoods)
+            {
+                <option value="@food.Id">@food.Name</option>
+            }
+        </select>
+        <button id="add-food-btn" type="button" class="btn btn-primary">Add Food</button>
     </div>
+
+    <table id="food-table" class="table">
+        <thead>
+            <tr>
+                <th>Food</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 }
+
+<script>
+    window.onload = function () {
+        document.getElementById("add-food-btn").addEventListener("click", function () {
+            var foodSelect = document.getElementById("food-select");
+            var selectedFoodId = foodSelect.value;
+            var selectedFoodName = foodSelect.options[foodSelect.selectedIndex].text;
+
+            if (selectedFoodId) {
+                var foodTable = document.getElementById("food-table");
+                var tbody = foodTable.getElementsByTagName("tbody")[0];
+                var index = tbody.getElementsByTagName("tr").length;
+
+                var tr = document.createElement("tr");
+
+                // Food name cell
+                var tdFood = document.createElement("td");
+                tdFood.textContent = selectedFoodName;
+
+                // Quantity input cell
+                var tdQuantity = document.createElement("td");
+                var inputQuantity = document.createElement("input");
+                inputQuantity.type = "number";
+                inputQuantity.name = `SelectedFoods[${index}].Quantity`;
+                inputQuantity.className = "form-control";
+                inputQuantity.value = 1;
+                tdQuantity.appendChild(inputQuantity);
+
+                // Hidden input for food ID
+                var inputFoodId = document.createElement("input");
+                inputFoodId.type = "hidden";
+                inputFoodId.name = `SelectedFoods[${index}].FoodId`;
+                inputFoodId.value = selectedFoodId;
+                tdQuantity.appendChild(inputFoodId); // Append to the quantity cell for alignment
+
+                // Delete button cell
+                var tdDelete = document.createElement("td");
+                var deleteButton = document.createElement("button");
+                deleteButton.className = "btn btn-danger";
+                deleteButton.textContent = "Delete";
+                deleteButton

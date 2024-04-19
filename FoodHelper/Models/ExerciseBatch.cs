@@ -1,5 +1,4 @@
-﻿using FoodHelper.Data.Models;
-using FoodHelper.Data.Models.Base;
+﻿using FoodHelper.Data.Models.Base;
 
 namespace FoodHelper.Models
 {

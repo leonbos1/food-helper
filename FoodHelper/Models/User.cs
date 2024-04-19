@@ -1,6 +1,4 @@
-﻿using FoodHelper.Data.Models;
-using FoodHelper.Data.Models.Base;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace FoodHelper.Models;
 

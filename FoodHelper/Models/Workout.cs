@@ -18,7 +18,7 @@ namespace FoodHelper.Models
 
         public List<ExerciseBatch> ExerciseBatches { get; set; }
 
-        public Workout()    
+        public Workout()
         {
             ExerciseBatches = new List<ExerciseBatch>();
         }
